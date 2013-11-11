@@ -2495,6 +2495,100 @@ public final class Settings {
         public static final String VOLUME_WAKE_SCREEN = "volume_wake_screen";
 
         /**
+         * Whether or not volume button music controls should be enabled to seek media tracks
+         * @hide
+         */
+        public static final String VOLUME_MUSIC_CONTROLS = "volume_music_controls";
+
+        /**
+         * Whether or not to show circle battery around the lockscreen ring
+         * @hide
+         */
+        public static final String BATTERY_AROUND_LOCKSCREEN_RING = "battery_around_lockscreen_ring";
+
+        /**
+         * Display style of the status bar battery information
+         * default: 0
+         * @hide
+         */
+        public static final String STATUS_BAR_BATTERY = "status_bar_battery";
+
+        /**
+         * Circle battery icon color
+         * in statusbar
+         * @hide
+         */
+        public static final String STATUS_BAR_BATTERY_COLOR = "status_bar_battery_color";
+
+        /**
+         * Battery icon text color
+         * in statusbar
+         * @hide
+         */
+        public static final String STATUS_BAR_BATTERY_TEXT_COLOR = "status_bar_battery_text_color";
+
+        /**
+         * Battery icon text charging color
+         * in statusbar
+         * @hide
+         */
+        public static final String STATUS_BAR_BATTERY_TEXT_CHARGING_COLOR =
+                "status_bar_battery_text_charging_color";
+
+        /**
+         * Circle battery animation speed during charge
+         * in statusbar
+         * @hide
+         */
+        public static final String STATUS_BAR_CIRCLE_BATTERY_ANIMATIONSPEED =
+                "status_bar_circle_battery_animationspeed";
+
+    	/**
+         * whether which Ram Usage Bar mode is used on recent switcher
+         * 0 = none, 1 = only app use, 2 = app and cache use, 3 = app, cache and system use
+         * @hide
+         */
+        public static final String RECENTS_RAM_BAR_MODE = "recents_ram_bar_mode";
+
+        /**
+         * Ram Usage Bar system mem color
+         *
+         * @hide
+         */
+        public static final String RECENTS_RAM_BAR_MEM_COLOR = "recents_ram_bar_mem_color";
+
+        /**
+         * Ram Usage Bar cached mem color
+         *
+         * @hide
+         */
+        public static final String RECENTS_RAM_BAR_CACHE_COLOR = "recents_ram_bar_cache_color";
+
+        /**
+         * Ram Usage Bar app mem color
+         *
+         * @hide
+         */
+        public static final String RECENTS_RAM_BAR_ACTIVE_APPS_COLOR = "recents_ram_bar_active_apps_color";
+
+        /*
+         * Volume keys control cursor in text fields (default is 0)
+         * 0 - Disabled
+         * 1 - Volume up/down moves cursor left/right
+         * 2 - Volume up/down moves cursor right/left
+         * @hide
+         */
+        public static final String VOLUME_KEY_CURSOR_CONTROL = "volume_key_cursor_control";
+
+        /*
+         * Immersive mode global actions switch
+         * 0 = no
+         * 1 = yes
+         * @hide
+         */
+        public static final String IMMERSIVE_MODE = "immersive_mode";
+
+        /**
          * Quick settings tiles to show on status bar
          * @hide
          */
