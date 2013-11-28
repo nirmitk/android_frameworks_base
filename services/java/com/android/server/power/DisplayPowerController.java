@@ -553,7 +553,7 @@ final class DisplayPowerController {
                         Settings.System.getInt(mContext.getContentResolver(),
                             Settings.System.LOCKSCREEN_SEE_THROUGH, 0) == 1) {
             		DisplayInfo di = mDisplayManager.getDisplayInfo(mDisplayManager.getDisplayIds()[0]);
-                    bmp = SurfaceControl.screenshot(di.getNaturalWidth(), di.getNaturalHeight());
+                    bmp = SurfaceControl.screenshot(di.logicalWidth, di.logicalHeight);
             	}
                 mPendingRequestChangedLocked = true;
                 sendUpdatePowerStateLocked();
