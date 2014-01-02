@@ -105,7 +105,8 @@ class QuickSettings {
         BLUETOOTH,
         LOCATION,
         IMMERSIVE,
-        NFC
+        NFC,
+        ADB
     }
 
     public static final String NO_TILES = "NO_TILES";
@@ -806,6 +807,42 @@ class QuickSettings {
                     mModel.addNfcTile(nfcTile, new QuickSettingsModel.BasicRefreshCallback(nfcTile));
                     parent.addView(nfcTile);
                     if(addMissing) nfcTile.setVisibility(View.GONE);
+                } else if(Tile.ADB.toString().equals(tile.toString())) {
+                    final QuickSettingsBasicTile adbTile = new QuickSettingsBasicTile(mContext);
+                    adbTile.setTileId(Tile.ADB);
+                    boolean adbEnabled = Settings.Secure.getInt(mContext.getContentResolver(),
+                            Settings.Secure.ADB_PORT, -1) != -1;
+                    adbTile.setImageResource(adbEnabled ?
+                            R.drawable.ic_qs_adb_on :
+                            R.drawable.ic_qs_adb_off);
+                    adbTile.setTextResource(adbEnabled ?
+                            R.string.quick_settings_adb_label :
+                            R.string.quick_settings_adb_off_label);
+                    adbTile.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            boolean enabled = Settings.Secure.getInt(mContext.getContentResolver(),
+                                    Settings.Secure.ADB_PORT, -1) != -1;
+                            if (enabled) {
+                                Settings.Secure.putInt(mContext.getContentResolver(),
+                                    Settings.Secure.ADB_PORT, -1);
+                            } else {
+                                Settings.Secure.putInt(mContext.getContentResolver(),
+                                        Settings.Secure.ADB_PORT, 5555);
+                            }
+                            enabled = !enabled;
+                            adbTile.setImageResource(enabled ?
+                                    R.drawable.ic_qs_adb_on :
+                                    R.drawable.ic_qs_adb_off);
+                            adbTile.setTextResource(enabled ?
+                                    R.string.quick_settings_adb_label :
+                                    R.string.quick_settings_adb_off_label);
+                        }
+                    });
+                    mModel.addAdbTile(adbTile, new QuickSettingsModel.BasicRefreshCallback(adbTile));
+                    parent.addView(adbTile);
+                    if(addMissing) adbTile.setVisibility(View.GONE);
                 }
             }
         }
