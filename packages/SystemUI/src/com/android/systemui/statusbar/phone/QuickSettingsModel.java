@@ -238,8 +238,8 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
             }
         }
     };
-    
-    /* ContentObserver observing changes of adb over network */
+
+    /** ContentObserver observing changes of adb over network */
     private class AdbObserver extends ContentObserver {
         public AdbObserver(Handler handler) {
             super(handler);
@@ -253,6 +253,9 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
             final ContentResolver cr = mContext.getContentResolver();
             cr.registerContentObserver(
                     Settings.Secure.getUriFor(Settings.Secure.ADB_PORT), false, this,
+                    UserHandle.USER_ALL);
+            cr.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.QUICK_SETTINGS_ADB_TILE), false, this,
                     UserHandle.USER_ALL);
         }
     }
@@ -337,7 +340,7 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
     private QuickSettingsTileView mNfcTile;
     private RefreshCallback mNfcCallback;
     private State mNfcState = new State();
-    
+
     private QuickSettingsTileView mAdbTile;
     private RefreshCallback mAdbCallback;
     private State mAdbState = new State();
@@ -711,7 +714,7 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
         mAdbTile = view;
         mAdbCallback = cb;
         mAdbCallback.refreshView(view, mAdbState);
-        
+
     }
     void onAdbChanged() {
         if (mAdbTile != null) {
@@ -728,7 +731,7 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
             mAdbCallback.refreshView(mAdbTile, mAdbState);
         }
     }
-    
+
     // Bug report
     void addBugreportTile(QuickSettingsTileView view, RefreshCallback cb) {
         mBugreportTile = view;

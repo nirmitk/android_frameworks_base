@@ -349,6 +349,11 @@ class QuickSettings {
                     Settings.System.IMMERSIVE_MODE, 0) == 1;
     }
 
+    private boolean isAdbTileEnabled() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.QUICK_SETTINGS_ADB_TILE, 0) == 1;
+    }
+
     private void addTiles(ViewGroup parent, LayoutInflater inflater, boolean addMissing) {
         // Load all the customizable tiles. If not yet modified by the user, load default ones.
         // After enabled tiles are loaded, proceed to load missing tiles and set them to View.GONE.
@@ -807,42 +812,6 @@ class QuickSettings {
                     mModel.addNfcTile(nfcTile, new QuickSettingsModel.BasicRefreshCallback(nfcTile));
                     parent.addView(nfcTile);
                     if(addMissing) nfcTile.setVisibility(View.GONE);
-                } else if(Tile.ADB.toString().equals(tile.toString())) {
-                    final QuickSettingsBasicTile adbTile = new QuickSettingsBasicTile(mContext);
-                    adbTile.setTileId(Tile.ADB);
-                    boolean adbEnabled = Settings.Secure.getInt(mContext.getContentResolver(),
-                            Settings.Secure.ADB_PORT, -1) != -1;
-                    adbTile.setImageResource(adbEnabled ?
-                            R.drawable.ic_qs_adb_on :
-                            R.drawable.ic_qs_adb_off);
-                    adbTile.setTextResource(adbEnabled ?
-                            R.string.quick_settings_adb_label :
-                            R.string.quick_settings_adb_off_label);
-                    adbTile.setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View v) {
-                            boolean enabled = Settings.Secure.getInt(mContext.getContentResolver(),
-                                    Settings.Secure.ADB_PORT, -1) != -1;
-                            if (enabled) {
-                                Settings.Secure.putInt(mContext.getContentResolver(),
-                                    Settings.Secure.ADB_PORT, -1);
-                            } else {
-                                Settings.Secure.putInt(mContext.getContentResolver(),
-                                        Settings.Secure.ADB_PORT, 5555);
-                            }
-                            enabled = !enabled;
-                            adbTile.setImageResource(enabled ?
-                                    R.drawable.ic_qs_adb_on :
-                                    R.drawable.ic_qs_adb_off);
-                            adbTile.setTextResource(enabled ?
-                                    R.string.quick_settings_adb_label :
-                                    R.string.quick_settings_adb_off_label);
-                        }
-                    });
-                    mModel.addAdbTile(adbTile, new QuickSettingsModel.BasicRefreshCallback(adbTile));
-                    parent.addView(adbTile);
-                    if(addMissing) adbTile.setVisibility(View.GONE);
                 }
             }
         }
@@ -982,6 +951,48 @@ class QuickSettings {
                 new QuickSettingsModel.BasicRefreshCallback(sslCaCertWarningTile)
                         .setShowWhenEnabled(true));
         parent.addView(sslCaCertWarningTile);
+
+        // ADB over network
+        final QuickSettingsBasicTile adbTile = new QuickSettingsBasicTile(mContext);
+        adbTile.setTemporary(true);
+        boolean adbEnabled = Settings.Secure.getInt(mContext.getContentResolver(),
+                Settings.Secure.ADB_PORT, -1) != -1;
+        adbTile.setImageResource(adbEnabled ?
+                R.drawable.ic_qs_adb_on :
+                R.drawable.ic_qs_adb_off);
+        adbTile.setTextResource(adbEnabled ?
+                R.string.quick_settings_adb_label :
+                R.string.quick_settings_adb_off_label);
+        adbTile.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                boolean enabled = Settings.Secure.getInt(mContext.getContentResolver(),
+                        Settings.Secure.ADB_PORT, -1) != -1;
+                if (enabled) {
+                    Settings.Secure.putInt(mContext.getContentResolver(),
+                        Settings.Secure.ADB_PORT, -1);
+                } else {
+                    Settings.Secure.putInt(mContext.getContentResolver(),
+                            Settings.Secure.ADB_PORT, 5555);
+                }
+                enabled = !enabled;
+                adbTile.setImageResource(enabled ?
+                        R.drawable.ic_qs_adb_on :
+                        R.drawable.ic_qs_adb_off);
+                adbTile.setTextResource(enabled ?
+                        R.string.quick_settings_adb_label :
+                        R.string.quick_settings_adb_off_label);
+            }
+        });
+        mModel.addAdbTile(adbTile, new QuickSettingsModel.BasicRefreshCallback(adbTile) {
+            @Override
+            public void refreshView(QuickSettingsTileView view, State state) {
+                super.refreshView(view, state);
+                adbTile.setVisibility(isAdbTileEnabled() ? View.VISIBLE : View.GONE);
+            }
+        });
+        parent.addView(adbTile);
     }
 
     List<String> enumToStringArray(Tile[] enumData) {
